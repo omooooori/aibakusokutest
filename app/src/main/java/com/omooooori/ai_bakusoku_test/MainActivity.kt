@@ -6,10 +6,10 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
-import com.omooooori.ai_bakusoku_test.ui.screens.MainScreen
+import com.omooooori.ai_bakusoku_test.ui.screens.MainNavigationScreen
 import com.omooooori.ai_bakusoku_test.ui.theme.AibakusokutestTheme
 
 class MainActivity : ComponentActivity() {
@@ -20,11 +20,11 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             AibakusokutestTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    MainScreen(
-                        viewModel = viewModel,
-                        modifier = Modifier.padding(innerPadding)
-                    )
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colorScheme.background
+                ) {
+                    MainNavigationScreen(viewModel = viewModel)
                 }
             }
         }

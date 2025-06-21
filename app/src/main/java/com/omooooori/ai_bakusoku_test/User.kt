@@ -4,7 +4,12 @@ data class User(
     val id: String,
     val name: String,
     val email: String,
-    val age: Int
+    val age: Int,
+    val department: String = "",
+    val position: String = "",
+    val joinDate: String = "",
+    val skills: List<String> = emptyList(),
+    val projects: List<String> = emptyList()
 )
 
 data class CalculationResult(
