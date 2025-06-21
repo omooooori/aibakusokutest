@@ -1,0 +1,161 @@
+# AI Bakusoku Test - Cursor Rules
+
+## プロジェクト概要
+このプロジェクトは、Cursorのルールファイル（mdc）を使って、チャットでコマンドを入力すると現在のコードに対するテストコード（単体テスト、UIテスト）を自動生成する機能をテストするためのサンプルAndroidアプリです。
+
+## アプリケーション構造
+```
+app/src/main/java/com/omooooori/ai_bakusoku_test/
+├── MainActivity.kt                    # メインアクティビティ
+├── MainViewModel.kt                   # MVVMアーキテクチャのビューモデル
+├── User.kt                           # データクラスとリポジトリ
+├── ui/
+│   ├── components/                   # UIコンポーネント
+│   │   ├── Greeting.kt              # 挨拶コンポーネント
+│   │   ├── Calculator.kt            # 計算機コンポーネント
+│   │   ├── UserInputForm.kt         # ユーザー入力フォーム
+│   │   └── UserList.kt              # ユーザーリスト
+│   ├── screens/                      # 画面
+│   │   └── MainScreen.kt            # メイン画面
+│   └── theme/                       # UIテーマ
+└── utils/                           # ユーティリティ
+    └── ValidationUtils.kt           # バリデーション関数
+```
+
+### 主要クラス
+- **MainActivity**: Jetpack Composeを使用したメイン画面
+- **MainViewModel**: MVVMアーキテクチャのビューモデル
+- **UserRepository**: ユーザーデータの管理
+- **CalculatorService**: 計算機能のビジネスロジック
+- **User**: ユーザーデータクラス
+- **CalculationResult**: 計算結果データクラス
+
+### UIコンポーネント
+- **Greeting**: 挨拶メッセージ表示
+- **Calculator**: 計算機機能
+- **UserInputForm**: ユーザー入力フォーム
+- **UserList**: ユーザーリスト表示
+- **MainScreen**: メイン画面の統合
+
+## テスト生成ルール
+
+### 単体テスト（Unit Tests）
+1. **テスト対象クラス**:
+   - `MainViewModel`
+   - `UserRepository`
+   - `CalculatorService`
+   - `ValidationUtils`（`calculateResult`, `validateForm`）
+
+2. **テストケース要件**:
+   - 正常系のテストケース
+   - 異常系のテストケース
+   - エッジケースのテスト
+   - 境界値テスト
+   - モックを使用した依存関係のテスト
+
+3. **テストファイル命名規則**:
+   - `{ClassName}Test.kt`
+   - 例: `MainViewModelTest.kt`, `UserRepositoryTest.kt`, `ValidationUtilsTest.kt`
+
+4. **テストメソッド命名規則**:
+   - `{methodName}_{scenario}_{expectedResult}`
+   - 例: `addUser_withValidData_returnsTrue`
+
+### UIテスト（Instrumented Tests）
+1. **テスト対象画面**:
+   - `MainActivity`
+   - `MainScreen`
+   - `Calculator` Composable
+   - `UserInputForm` Composable
+   - `UserList` Composable
+   - `Greeting` Composable
+
+2. **テストケース要件**:
+   - UI要素の表示確認
+   - ユーザー入力の検証
+   - ボタンクリックの動作確認
+   - 状態変化の確認
+   - エラーメッセージの表示確認
+
+3. **テストファイル命名規則**:
+   - `{ScreenName}UITest.kt` または `{ComponentName}UITest.kt`
+   - 例: `MainActivityUITest.kt`, `CalculatorUITest.kt`, `UserInputFormUITest.kt`
+
+4. **テストメソッド命名規則**:
+   - `test_{action}_{expectedResult}`
+   - 例: `test_calculatorAddition_displaysCorrectResult`
+
+### Compose UIテスト
+1. **テスト対象**:
+   - 個別のComposable関数
+   - Composable関数の組み合わせ
+   - UIコンポーネントの相互作用
+
+2. **テスト要件**:
+   - コンポーネントの表示確認
+   - 状態変化の確認
+   - ユーザーインタラクションのテスト
+   - プレビューの動作確認
+
+## テスト生成コマンド
+
+### 単体テスト生成
+```
+「{クラス名}の単体テストを作成してください」
+例: 「MainViewModelの単体テストを作成してください」
+例: 「UserRepositoryの単体テストを作成してください」
+例: 「ValidationUtilsの単体テストを作成してください」
+```
+
+### UIテスト生成
+```
+「{画面名/コンポーネント名}のUIテストを作成してください」
+例: 「MainActivityのUIテストを作成してください」
+例: 「CalculatorのUIテストを作成してください」
+例: 「UserInputFormのUIテストを作成してください」
+例: 「UserListのUIテストを作成してください」
+```
+
+### Compose UIテスト生成
+```
+「{Composable名}のCompose UIテストを作成してください」
+例: 「GreetingのCompose UIテストを作成してください」
+例: 「CalculatorのCompose UIテストを作成してください」
+```
+
+### 全テスト生成
+```
+「このアプリの全テストを作成してください」
+```
+
+## テスト品質要件
+1. **カバレッジ**: 最低80%のコードカバレッジを目標
+2. **可読性**: テストメソッド名とコメントでテストの意図を明確化
+3. **保守性**: テストデータの再利用とヘルパーメソッドの活用
+4. **独立性**: 各テストケースは独立して実行可能
+5. **速度**: テストの実行時間を最小化
+
+## 使用ライブラリ
+- **JUnit 4**: 単体テスト
+- **Espresso**: UIテスト
+- **Compose UI Testing**: Compose UIテスト
+- **Mockito**: モック作成（必要に応じて）
+
+## テストデータ
+- 有効なユーザーデータ
+- 無効なユーザーデータ
+- 計算テストデータ
+- エッジケースデータ
+
+## ファイル構造の考慮事項
+1. **UIコンポーネント**: `ui/components/` ディレクトリに配置
+2. **画面**: `ui/screens/` ディレクトリに配置
+3. **ユーティリティ**: `utils/` ディレクトリに配置
+4. **テスト**: 対応するソースファイルと同じパッケージ構造で配置
+
+## 注意事項
+1. テストは実際のAndroidデバイスまたはエミュレータで実行されることを前提とする
+2. 非同期処理のテストには適切な待機処理を含める
+3. テストデータはテスト実行後にクリーンアップする
+4. テスト失敗時は適切なエラーメッセージを提供する
+5. Composable関数のテストでは、プレビュー機能も考慮する 
