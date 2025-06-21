@@ -26,9 +26,11 @@ class MainViewModel : ViewModel() {
     
     init {
         loadUsers()
+        // サンプルユーザーを追加
+        addSampleUsers()
     }
     
-    fun addUser(name: String, email: String, age: String) {
+    fun addUser(name: String, email: String, age: String, department: String = "", position: String = "", skills: String = "") {
         viewModelScope.launch {
             _uiState.value = _uiState.value.copy(isLoading = true, errorMessage = null)
             
@@ -37,16 +39,25 @@ class MainViewModel : ViewModel() {
                 if (ageInt == null) {
                     _uiState.value = _uiState.value.copy(
                         isLoading = false,
-                        errorMessage = "Invalid age format"
+                        errorMessage = "年齢の形式が無効です"
                     )
                     return@launch
+                }
+                
+                val skillsList = if (skills.isNotEmpty()) {
+                    skills.split(",").map { it.trim() }
+                } else {
+                    emptyList()
                 }
                 
                 val user = User(
                     id = UUID.randomUUID().toString(),
                     name = name,
                     email = email,
-                    age = ageInt
+                    age = ageInt,
+                    department = department,
+                    position = position,
+                    skills = skillsList
                 )
                 
                 val success = userRepository.addUser(user)
@@ -54,18 +65,18 @@ class MainViewModel : ViewModel() {
                     loadUsers()
                     _uiState.value = _uiState.value.copy(
                         isLoading = false,
-                        successMessage = "User added successfully"
+                        successMessage = "ユーザーが正常に追加されました"
                     )
                 } else {
                     _uiState.value = _uiState.value.copy(
                         isLoading = false,
-                        errorMessage = "Invalid user data"
+                        errorMessage = "無効なユーザーデータです"
                     )
                 }
             } catch (e: Exception) {
                 _uiState.value = _uiState.value.copy(
                     isLoading = false,
-                    errorMessage = e.message ?: "Unknown error occurred"
+                    errorMessage = e.message ?: "不明なエラーが発生しました"
                 )
             }
         }
@@ -81,45 +92,45 @@ class MainViewModel : ViewModel() {
                     loadUsers()
                     _uiState.value = _uiState.value.copy(
                         isLoading = false,
-                        successMessage = "User updated successfully"
+                        successMessage = "ユーザーが正常に更新されました"
                     )
                 } else {
                     _uiState.value = _uiState.value.copy(
                         isLoading = false,
-                        errorMessage = "Failed to update user"
+                        errorMessage = "ユーザーの更新に失敗しました"
                     )
                 }
             } catch (e: Exception) {
                 _uiState.value = _uiState.value.copy(
                     isLoading = false,
-                    errorMessage = e.message ?: "Unknown error occurred"
+                    errorMessage = e.message ?: "不明なエラーが発生しました"
                 )
             }
         }
     }
     
-    fun deleteUser(userId: String) {
+    fun deleteUser(user: User) {
         viewModelScope.launch {
             _uiState.value = _uiState.value.copy(isLoading = true, errorMessage = null)
             
             try {
-                val success = userRepository.deleteUser(userId)
+                val success = userRepository.deleteUser(user.id)
                 if (success) {
                     loadUsers()
                     _uiState.value = _uiState.value.copy(
                         isLoading = false,
-                        successMessage = "User deleted successfully"
+                        successMessage = "ユーザーが正常に削除されました"
                     )
                 } else {
                     _uiState.value = _uiState.value.copy(
                         isLoading = false,
-                        errorMessage = "Failed to delete user"
+                        errorMessage = "ユーザーの削除に失敗しました"
                     )
                 }
             } catch (e: Exception) {
                 _uiState.value = _uiState.value.copy(
                     isLoading = false,
-                    errorMessage = e.message ?: "Unknown error occurred"
+                    errorMessage = e.message ?: "不明なエラーが発生しました"
                 )
             }
         }
@@ -136,7 +147,7 @@ class MainViewModel : ViewModel() {
                 if (firstNumber == null || secondNumber == null) {
                     _uiState.value = _uiState.value.copy(
                         isLoading = false,
-                        errorMessage = "Invalid number format"
+                        errorMessage = "数値の形式が無効です"
                     )
                     return@launch
                 }
@@ -148,13 +159,13 @@ class MainViewModel : ViewModel() {
                 _uiState.value = _uiState.value.copy(
                     isLoading = false,
                     calculationHistory = currentHistory,
-                    successMessage = if (!result.isError) "Calculation completed" else null,
+                    successMessage = if (!result.isError) "計算が完了しました" else null,
                     errorMessage = result.errorMessage
                 )
             } catch (e: Exception) {
                 _uiState.value = _uiState.value.copy(
                     isLoading = false,
-                    errorMessage = e.message ?: "Unknown error occurred"
+                    errorMessage = e.message ?: "不明なエラーが発生しました"
                 )
             }
         }
@@ -169,12 +180,12 @@ class MainViewModel : ViewModel() {
                 _uiState.value = _uiState.value.copy(
                     isLoading = false,
                     currentUser = user,
-                    errorMessage = if (user == null) "User not found" else null
+                    errorMessage = if (user == null) "ユーザーが見つかりません" else null
                 )
             } catch (e: Exception) {
                 _uiState.value = _uiState.value.copy(
                     isLoading = false,
-                    errorMessage = e.message ?: "Unknown error occurred"
+                    errorMessage = e.message ?: "不明なエラーが発生しました"
                 )
             }
         }
@@ -194,9 +205,46 @@ class MainViewModel : ViewModel() {
                 _uiState.value = _uiState.value.copy(users = users)
             } catch (e: Exception) {
                 _uiState.value = _uiState.value.copy(
-                    errorMessage = e.message ?: "Failed to load users"
+                    errorMessage = e.message ?: "ユーザーの読み込みに失敗しました"
                 )
             }
         }
+    }
+    
+    private fun addSampleUsers() {
+        val sampleUsers = listOf(
+            User(
+                id = "1",
+                name = "田中太郎",
+                email = "tanaka@example.com",
+                age = 30,
+                department = "開発部",
+                position = "シニアエンジニア",
+                skills = listOf("Kotlin", "Android", "Jetpack Compose", "MVVM")
+            ),
+            User(
+                id = "2",
+                name = "佐藤花子",
+                email = "sato@example.com",
+                age = 25,
+                department = "デザイン部",
+                position = "UIデザイナー",
+                skills = listOf("Figma", "Adobe XD", "Photoshop", "Illustrator")
+            ),
+            User(
+                id = "3",
+                name = "鈴木一郎",
+                email = "suzuki@example.com",
+                age = 35,
+                department = "マネジメント部",
+                position = "プロジェクトマネージャー",
+                skills = listOf("プロジェクト管理", "アジャイル", "スクラム")
+            )
+        )
+        
+        sampleUsers.forEach { user ->
+            userRepository.addUser(user)
+        }
+        loadUsers()
     }
 } 
