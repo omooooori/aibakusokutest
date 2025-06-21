@@ -1,0 +1,30 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# Generate Tests
+
+Generate JUnit and Espresso tests for the specified Kotlin/Android code, including mock dependencies if necessary.
+
+system
+generate tests
+
+prompt
+以下のKotlin/Androidコードに対して、JUnitとEspressoを使ったテストを作成してください。
+
+## 単体テスト（Unit Tests）
+- パブリック関数やViewModelのロジックを重点的にカバーしてください
+- 外部依存（例：Repository、Serviceなど）は必要に応じてモック化してください
+- テストクラス名は `{元のクラス名}Test` とし、1ファイルにまとめてください
+- JUnit 4を使用し、必要に応じてMockitoを使用してください
+
+## UIテスト（Instrumented Tests）
+- Jetpack ComposeのUIコンポーネントに対してCompose UI Testingを使用してください
+- ユーザーインタラクション（クリック、入力など）のテストを含めてください
+- テストクラス名は `{元のクラス名}UITest` としてください
+
+## テストファイル配置
+- 単体テスト: `app/src/test/java/` 配下
+- UIテスト: `app/src/androidTest/java/` 配下
+- パッケージ構造は元のソースコードと同じにしてください

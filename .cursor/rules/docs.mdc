@@ -1,0 +1,18 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+Update Docs
+Update README.md and add inline code documentation (KDoc style).
+
+system
+update docs
+
+prompt
+次の変更内容をもとに、README.mdとKotlinコードコメントを更新してください。
+
+- README.mdには「概要」「セットアップ方法」「技術スタック」「簡単な使い方」を追記・修正してください
+- Kotlinコードにはクラス・メソッド・プロパティに対してKDoc形式のドキュメントコメントを追加してください（例：@param, @return, @see）
+- Composable関数には適切なKDocコメントを追加してください
+- AndroidManifest.xmlの権限やアクティビティの説明も必要に応じて更新してください
